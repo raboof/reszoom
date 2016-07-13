@@ -1,0 +1,12 @@
+{
+  "manifest_version": 2,
+  "name": "Resolution Zoom",
+  "description": "Set the zoom level based on your screen resolution. Useful when you have both high- and low-dpi screens",
+  "version": "0.1",
+  "background": {
+    "scripts": ["background.js"]
+  },
+  "permissions": [
+    "system.display"
+  ]
+}
