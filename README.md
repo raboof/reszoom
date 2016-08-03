@@ -34,7 +34,7 @@ suitable size.
 
 ## Known problems
 
-Because of a [limitiation in chrome](https://bugs.chromium.org/p/chromium/issues/detail?id=627830) the zoom level might not be updated immediately, but after a change in focus or tabs.
+Because of a [limitation in chrome](https://bugs.chromium.org/p/chromium/issues/detail?id=627830) the zoom level might not be updated immediately, but after a change in focus or tabs.
 
 ## Credits
 
