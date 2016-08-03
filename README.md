@@ -4,6 +4,8 @@ Chrome extension to automatically adjust page zoom settings based on screen reso
 
 Currently, it will decide between 'high-resolution' and 'low-resolution' by checking if the screen is wider than 2800 pixels. If so, pages at zoom levels 100% or 200% will be automatically set to 100% for regular-DPI screens, and 200% for high-DPI screens.
 
+![Overview](overview.png)
+
 ## Background
 
 HiDPI (High Dots Per Inch, also called 'Retina') displays are a joy to use,
