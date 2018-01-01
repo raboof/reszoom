@@ -53,7 +53,7 @@ function findScreen(window, screens) {
       return screen;
     }
   }
-  return screen[0];
+  return screens[0];
 }
 
 function updateZoomLevelsForWindow(window, screens) {
