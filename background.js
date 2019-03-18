@@ -1,5 +1,11 @@
-const normalDpiZoom = 1;
-const highDpiZoom = 2;
+let normalDpiZoom = 1;
+let highDpiZoom = 1.25 ;
+
+chrome.storage.sync.get(['normalDpiZoomValue', 'highDpiZoomValue'], function(data) {
+  normalDpiZoom = Number(data.normalDpiZoomValue);
+  highDpiZoom = Number(data.highDpiZoomValue);
+});
+
 
 function zoomSettingsSet() {
   if (chrome.runtime.lastError) {
@@ -16,8 +22,8 @@ function zoomLevelSet() {
 function updateZoomLevelsForTabTo(tabId, newZoom) {
   chrome.tabs.getZoom(tabId, currentZoom => {
     console.log('current zoom factor for tab ' + tabId + ': ' + currentZoom);
-    if (currentZoom != newZoom && 
-        (currentZoom == highDpiZoom || currentZoom == normalDpiZoom)) {
+    if (currentZoom != newZoom &&
+      (currentZoom == highDpiZoom || currentZoom == normalDpiZoom)) {
       console.log('updating to', newZoom);
 
       // This can produce errors in the console for 'chrome://' tabs,
@@ -47,9 +53,9 @@ function findScreen(window, screens) {
   for (var i = 0; i < screens.length; i++) {
     const screen = screens[i];
     if (window.left >= screen.bounds.left
-        && window.left <= screen.bounds.left + screen.bounds.width
-        && window.top >= screen.bounds.top
-        && window.top <= screen.bounds.top + screen.bounds.height) {
+      && window.left <= screen.bounds.left + screen.bounds.width
+      && window.top >= screen.bounds.top
+      && window.top <= screen.bounds.top + screen.bounds.height) {
       return screen;
     }
   }
@@ -92,4 +98,15 @@ chrome.tabs.onUpdated.addListener(() => {
 chrome.windows.onFocusChanged.addListener(() => {
   console.log('focusChanged');
   updateZoomLevels();
+});
+
+chrome.runtime.onInstalled.addListener(function () {
+  chrome.storage.sync.set({'normalDpiZoomValue': 1 }, function () {
+    console.log("The normal DPI zoom == 1");
+  });
+});
+chrome.runtime.onInstalled.addListener(function () {
+  chrome.storage.sync.set({'highDpiZoomValue': 1.25 }, function () {
+    console.log("The normal DPI zoom == 1.25");
+  });
 });
