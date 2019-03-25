@@ -1,6 +1,7 @@
 let normalDpiZoom = 1;
 let highDpiZoom = 1.25 ;
 
+<<<<<<< HEAD
 chrome.storage.local.get(['normalDpiZoomValue', 'highDpiZoomValue'], function(data) {
   if (data.normalDpiZoomValue == null){
     normalDpiZoom = 1
@@ -33,6 +34,11 @@ chrome.storage.local.get(['normalDpiZoomValue', 'highDpiZoomValue'], function(da
       console.log('High DPI Zoom Value is set to ' + highDpiZoom);
     });
   }
+=======
+chrome.storage.sync.get(['normalDpiZoomValue', 'highDpiZoomValue'], function(data) {
+  normalDpiZoom = Number(data.normalDpiZoomValue);
+  highDpiZoom = Number(data.highDpiZoomValue);
+>>>>>>> fa59ed29fbf05cae3091fafd0360fe431d520054
 });
 
 
@@ -129,6 +135,7 @@ chrome.windows.onFocusChanged.addListener(() => {
   updateZoomLevels();
 });
 
+<<<<<<< HEAD
 chrome.runtime.onInstalled.addListener(function() {
   chrome.storage.local.set({
       'normalDpiZoomValue': normalDpiZoom,
@@ -138,3 +145,15 @@ chrome.runtime.onInstalled.addListener(function() {
     console.log("The normal DPI zoom == " + highDpiZoom);
   });
 });
+=======
+chrome.runtime.onInstalled.addListener(function () {
+  chrome.storage.sync.set({'normalDpiZoomValue': 1 }, function () {
+    console.log("The normal DPI zoom == 1");
+  });
+});
+chrome.runtime.onInstalled.addListener(function () {
+  chrome.storage.sync.set({'highDpiZoomValue': 1.25 }, function () {
+    console.log("The normal DPI zoom == 1.25");
+  });
+});
+>>>>>>> fa59ed29fbf05cae3091fafd0360fe431d520054
