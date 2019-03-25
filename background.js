@@ -1,5 +1,40 @@
-const normalDpiZoom = 1;
-const highDpiZoom = 2;
+let normalDpiZoom = 1;
+let highDpiZoom = 1.25 ;
+
+chrome.storage.local.get(['normalDpiZoomValue', 'highDpiZoomValue'], function(data) {
+  if (data.normalDpiZoomValue == null){
+    normalDpiZoom = 1
+    chrome.storage.local.set({
+      'normalDpiZoomValue': normalDpiZoom
+    }, function(){
+      console.log('Normal DPI Zoom Value is set to ' + normalDpiZoom);
+    });
+  } else {
+    normalDpiZoom = Number(data.normalDpiZoomValue)
+    chrome.storage.local.set({
+      'normalDpiZoomValue': normalDpiZoom
+    }, function(){
+      console.log('Normal DPI Zoom Value is set to ' + normalDpiZoom);
+    });
+  }
+
+  if (data.highDpiZoomValue == null){
+    highDpiZoom = 1.25
+    chrome.storage.local.set({
+      'highDpiZoomValue': highDpiZoom
+    }, function(){
+      console.log('High DPI Zoom Value is set to ' + highDpiZoom);
+    });
+  } else {
+    highDpiZoom = Number(data.highDpiZoomValue)
+    chrome.storage.local.set({
+      'highDpiZoomValue': highDpiZoom
+    }, function(){
+      console.log('High DPI Zoom Value is set to ' + highDpiZoom);
+    });
+  }
+});
+
 
 function zoomSettingsSet() {
   if (chrome.runtime.lastError) {
@@ -16,8 +51,8 @@ function zoomLevelSet() {
 function updateZoomLevelsForTabTo(tabId, newZoom) {
   chrome.tabs.getZoom(tabId, currentZoom => {
     console.log('current zoom factor for tab ' + tabId + ': ' + currentZoom);
-    if (currentZoom != newZoom && 
-        (currentZoom == highDpiZoom || currentZoom == normalDpiZoom)) {
+    if (currentZoom != newZoom &&
+      (currentZoom == highDpiZoom || currentZoom == normalDpiZoom)) {
       console.log('updating to', newZoom);
 
       // This can produce errors in the console for 'chrome://' tabs,
@@ -47,9 +82,9 @@ function findScreen(window, screens) {
   for (var i = 0; i < screens.length; i++) {
     const screen = screens[i];
     if (window.left >= screen.bounds.left
-        && window.left <= screen.bounds.left + screen.bounds.width
-        && window.top >= screen.bounds.top
-        && window.top <= screen.bounds.top + screen.bounds.height) {
+      && window.left <= screen.bounds.left + screen.bounds.width
+      && window.top >= screen.bounds.top
+      && window.top <= screen.bounds.top + screen.bounds.height) {
       return screen;
     }
   }
@@ -92,4 +127,14 @@ chrome.tabs.onUpdated.addListener(() => {
 chrome.windows.onFocusChanged.addListener(() => {
   console.log('focusChanged');
   updateZoomLevels();
+});
+
+chrome.runtime.onInstalled.addListener(function() {
+  chrome.storage.local.set({
+      'normalDpiZoomValue': normalDpiZoom,
+      'highDpiZoomValue': highDpiZoom,
+    }, function() {
+    console.log("The normal DPI zoom == " + normalDpiZoom);
+    console.log("The normal DPI zoom == " + highDpiZoom);
+  });
 });
