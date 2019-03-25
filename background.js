@@ -1,7 +1,12 @@
 let normalDpiZoom = 1;
 let highDpiZoom = 1.25 ;
+let applyZoom = "false";
 
-chrome.storage.local.get(['normalDpiZoomValue', 'highDpiZoomValue'], function(data) {
+chrome.storage.local.get([
+  'normalDpiZoomValue',
+  'highDpiZoomValue',
+  'applyZoomValue'
+], function(data) {
   if (data.normalDpiZoomValue == null){
     normalDpiZoom = 1
     chrome.storage.local.set({
@@ -33,6 +38,22 @@ chrome.storage.local.get(['normalDpiZoomValue', 'highDpiZoomValue'], function(da
       console.log('High DPI Zoom Value is set to ' + highDpiZoom);
     });
   }
+
+  if (typeof data.applyZoomValuev === 'undefined' && data.applyZoomValuev === null) {
+    applyZoom = "false"
+    chrome.storage.local.set({
+      'applyZoomValue': applyZoom
+    }, function(){
+      console.log('applyZoomValue is set to ' + applyZoom);
+    });
+  } else {
+    applyZoom = data.applyZoomValue
+    chrome.storage.local.set({
+      'applyZoomValue': applyZoom
+    }, function(){
+      console.log('applyZoomValue is set to ' + applyZoom);
+    });
+  }
 });
 
 
@@ -52,12 +73,19 @@ function updateZoomLevelsForTabTo(tabId, newZoom) {
   chrome.tabs.getZoom(tabId, currentZoom => {
     console.log('current zoom factor for tab ' + tabId + ': ' + currentZoom);
     if (currentZoom != newZoom &&
-      (currentZoom == highDpiZoom || currentZoom == normalDpiZoom)) {
+       (currentZoom == highDpiZoom || currentZoom == normalDpiZoom)) {
       console.log('updating to', newZoom);
 
       // This can produce errors in the console for 'chrome://' tabs,
       // but we don't want to require the permissions to see the tab URL,
       // so we can't predict this:
+      chrome.tabs.setZoom(tabId, newZoom, zoomLevelSet);
+      chrome.tabs.setZoomSettings(tabId, { scope: 'per-tab' }, zoomSettingsSet);
+    }
+    // apply zoom regardless of the actual tab zoom
+    if (applyZoom == 'true' && newZoom != currentZoom &&
+       (currentZoom != highDpiZoom || currentZoom != normalDpiZoom)) {
+      console.log('############ applyZoom:' + applyZoom + ' updating ' + currentZoom + 'to', newZoom);
       chrome.tabs.setZoom(tabId, newZoom, zoomLevelSet);
       chrome.tabs.setZoomSettings(tabId, { scope: 'per-tab' }, zoomSettingsSet);
     }
@@ -133,8 +161,10 @@ chrome.runtime.onInstalled.addListener(function() {
   chrome.storage.local.set({
       'normalDpiZoomValue': normalDpiZoom,
       'highDpiZoomValue': highDpiZoom,
+      'applyZoomValue': applyZoom,
     }, function() {
     console.log("The normal DPI zoom == " + normalDpiZoom);
     console.log("The normal DPI zoom == " + highDpiZoom);
+    console.log("Apply zoom for customized tabs  == " + applyZoom);
   });
 });

@@ -3,7 +3,7 @@
     "name": "Resolution Zoom",
     "short_name": "reszoom",
     "description": "Set the zoom level based on your screen resolution.",
-    "version": "0.4",
+    "version": "0.5",
     "permissions": [
         "system.display",
         "storage"
