@@ -1,19 +1,25 @@
 {
-  "manifest_version": 2,
-  "name": "Resolution Zoom",
-  "short_name": "reszoom",
-  "description": "Set the zoom level based on your screen resolution.",
-  "version": "0.3",
-  "background": {
-    "scripts": ["background.js"]
-  },
-  "permissions": [
-    "system.display"
-  ],
-  "icons": {
-    "16": "icon/icon16.png",
-    "32": "icon/icon32.png",
-    "48": "icon/icon48.png",
-    "128": "icon/icon128.png"
-  }
+    "manifest_version": 2,
+    "name": "Resolution Zoom",
+    "short_name": "reszoom",
+    "description": "Set the zoom level based on your screen resolution.",
+    "version": "0.4",
+    "permissions": [
+        "system.display",
+        "storage"
+    ],
+    "background": {
+        "scripts": ["background.js"],
+        "persistent": false
+    },
+    "options_ui": {
+        "page": "options.html",
+        "open_in_tab": false
+    },
+    "icons": {
+        "16": "icon/icon16.png",
+        "32": "icon/icon32.png",
+        "48": "icon/icon48.png",
+        "128": "icon/icon128.png"
+    }
 }
